@@ -1,0 +1,28 @@
+import RPi.GPIO as GPIO
+import time
+
+# GPIO setup
+GPIO.setmode(GPIO.BCM)
+water_sensor_pin = 17  # Pin where the water level sensor is connected
+buzzer_pin = 18  # Pin where the buzzer or LED is connected (optional)
+
+GPIO.setup(water_sensor_pin, GPIO.IN)
+GPIO.setup(buzzer_pin, GPIO.OUT)
+
+def check_water_level():
+    if GPIO.input(water_sensor_pin):
+        print("Water detected!")
+        GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn on buzzer or LED
+    else:
+        print("No water detected.")
+        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn off buzzer or LED
+
+try:
+    while True:
+        check_water_level()
+        time.sleep(1)  # Check every 1 second
+
+except KeyboardInterrupt:
+    print("Program terminated")
+finally:
+    GPIO.cleanup()  # Clean up GPIO on exit
